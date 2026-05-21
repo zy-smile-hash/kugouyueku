@@ -95,18 +95,20 @@ body {
 }
 
 .scan-icon {
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
-    color: #fff;
-    padding: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    flex-shrink: 0;
 }
 
 .search-icon {
     font-size: 14px;
     opacity: 0.8;
+    flex-shrink: 0;
 }
 
 .search-placeholder {
+    flex: 1;
     color: rgba(255, 255, 255, 0.7);
     font-size: 13px;
     white-space: nowrap;
