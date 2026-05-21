@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCategoryTabs();
     initSongTabs();
     initBannerSlider();
+    initTopBannerSlider();
     initScrollEffects();
     initPlayerControls();
 });
@@ -67,6 +68,33 @@ function initBannerSlider() {
             dots.forEach(d => d.classList.remove('active'));
             dot.classList.add('active');
             currentIndex = index;
+        });
+    });
+}
+
+function initTopBannerSlider() {
+    const items = document.querySelectorAll('.banner-item-top');
+    const dots = document.querySelectorAll('.banner-dots-top .dot-top');
+    let currentIndex = 0;
+    
+    function showSlide(index) {
+        items.forEach((item, i) => {
+            item.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+    
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % items.length;
+        showSlide(currentIndex);
+    }, 3000);
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentIndex = index;
+            showSlide(currentIndex);
         });
     });
 }
