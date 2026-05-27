@@ -85,9 +85,10 @@
             width: 100%;
         }
 
-        .image-container {
+        .image-wrapper {
             position: relative;
             width: 100%;
+            display: inline-block;
         }
 
         .main-image {
@@ -107,14 +108,14 @@
         }
 
         .clickable-area:hover {
-            background: rgba(255, 0, 0, 0.3);
+            background: rgba(255, 0, 0, 0.25);
             border-color: rgba(255, 0, 0, 0.9);
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
         }
 
         .clickable-area:active {
-            transform: scale(0.98);
-            background: rgba(255, 0, 0, 0.4);
+            transform: scale(0.97);
+            background: rgba(255, 0, 0, 0.35);
         }
 
         .secondary-page {
@@ -255,6 +256,45 @@
             transform: scale(1.1);
         }
 
+        .tooltip {
+            position: fixed;
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .help-hint {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 100;
+            text-align: center;
+            animation: fadeInOut 5s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         @media (max-width: 420px) {
             .phone-frame {
                 transform: scale(0.85);
@@ -269,69 +309,6 @@
                 transform: scale(0.75);
             }
         }
-
-        .tooltip {
-            position: fixed;
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip.show {
-            opacity: 1;
-        }
-
-        .nav-menu {
-            position: fixed;
-            top: 50%;
-            right: calc(50% - 210px);
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.95);
-            padding: 15px 10px;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 100;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .nav-menu h4 {
-            font-size: 12px;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .nav-item {
-            display: block;
-            padding: 8px 15px;
-            margin: 5px 0;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background: #667eea;
-            color: #fff;
-        }
-
-        @media (max-width: 420px) {
-            .nav-menu {
-                right: 20px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -339,7 +316,7 @@
         <div class="notch"></div>
         <div class="screen">
             <div id="mainPage" class="page main-page active">
-                <div class="image-container" id="imageContainer">
+                <div class="image-wrapper" id="imageWrapper">
                     <img src="./yuelu_image.png" alt="酷狗乐库" class="main-image" id="mainImage">
                 </div>
             </div>
@@ -896,45 +873,44 @@
     </div>
 
     <button class="back-to-top" onclick="scrollToTop()">↑</button>
-
-    <div class="nav-menu">
-        <h4>功能导航</h4>
-        <button class="nav-item" onclick="showPage('searchPage')">🔍 搜索</button>
-        <button class="nav-item" onclick="showPage('audiobookPage')">📚 听书</button>
-        <button class="nav-item" onclick="showPage('classifyPage')">🎵 分类</button>
-        <button class="nav-item" onclick="showPage('rankingPage')">🏆 排行榜</button>
-        <button class="nav-item" onclick="showPage('artistsPage')">🎤 歌手</button>
-        <button class="nav-item" onclick="showPage('appdownloadPage')">📱 下载</button>
-        <button class="nav-item" onclick="showPage('medalPage')">🏅 勋章</button>
-        <button class="nav-item" onclick="showPage('albumPage')">💿 唱片库</button>
-        <button class="nav-item" onclick="showPage('starlightPage')">⭐ 星光站</button>
-        <button class="nav-item" onclick="showPage('aiPage')">🤖 AI写歌</button>
-        <button class="nav-item" onclick="showPage('digitalPage')">💎 数字专辑</button>
-        <button class="nav-item" onclick="showPage('mallPage')">🛒 商城</button>
-        <button class="nav-item" onclick="showPage('wxappPage')">🎫 票务</button>
-        <button class="nav-item" onclick="showPage('reservePage')">📅 预约</button>
-        <button class="nav-item" onclick="showPage('module1Page')">✨ 编辑精选</button>
-        <button class="nav-item" onclick="showPage('module2Page')">🔥 热歌榜</button>
-        <button class="nav-item" onclick="showPage('module3Page')">🎶 新歌速递</button>
-        <button class="nav-item" onclick="showPage('module4Page')">🎧 热门专区</button>
-        <button class="nav-item" onclick="showPage('module5Page')">🎤 金曲系列</button>
-        <button class="nav-item" onclick="showPage('module6Page')">⭐ 名人堂</button>
-        <button class="nav-item" onclick="showPage('module7Page')">🏮 国风国潮</button>
-        <button class="nav-item" onclick="showPage('module8Page')">📺 热门综艺</button>
-        <button class="nav-item" onclick="showPage('module9Page')">🎮 热门游戏</button>
-        <button class="nav-item" onclick="showPage('module10Page')">🎬 热门影视</button>
-        <button class="nav-item" onclick="showPage('module11Page')">✍️ 词曲名家</button>
-        <button class="nav-item" onclick="showPage('module12Page')">🎵 厂牌音乐</button>
-        <button class="nav-item" onclick="showPage('module13Page')">💎 数字专辑</button>
-        <button class="nav-item" onclick="showPage('module14Page')">💿 新碟上架</button>
-        <button class="nav-item" onclick="showPage('module15Page')">📅 新歌预约</button>
-        <button class="nav-item" onclick="showPage('module16Page')">🎬 最新MV</button>
-    </div>
-
     <div id="tooltip" class="tooltip"></div>
+    <div class="help-hint">👆 请点击图片中的红色高亮区域测试跳转功能</div>
 
     <script>
         let pageHistory = ['mainPage'];
+
+        const clickableAreas = [
+            { id: 'search', page: 'searchPage', title: '搜索', top: 65, left: 20, width: 45, height: 28 },
+            { id: 'audiobook', page: 'audiobookPage', title: '听书', top: 65, left: 75, width: 45, height: 28 },
+            { id: 'classify', page: 'classifyPage', title: '歌曲/歌单分类', top: 230, left: 10, width: 100, height: 70 },
+            { id: 'ranking', page: 'rankingPage', title: '歌曲排行榜', top: 230, left: 120, width: 100, height: 70 },
+            { id: 'artists', page: 'artistsPage', title: '歌手分类', top: 230, left: 230, width: 100, height: 70 },
+            { id: 'appdownload', page: 'appdownloadPage', title: 'APP下载', top: 315, left: 10, width: 100, height: 50 },
+            { id: 'medal', page: 'medalPage', title: '勋章收藏馆', top: 315, left: 120, width: 100, height: 50 },
+            { id: 'album', page: 'albumPage', title: '至臻唱片库', top: 315, left: 230, width: 100, height: 50 },
+            { id: 'starlight', page: 'starlightPage', title: '星光站', top: 380, left: 10, width: 100, height: 50 },
+            { id: 'ai', page: 'aiPage', title: 'AI写歌', top: 380, left: 120, width: 100, height: 50 },
+            { id: 'digital', page: 'digitalPage', title: '数字专辑', top: 380, left: 230, width: 100, height: 50 },
+            { id: 'mall', page: 'mallPage', title: '酷狗商城', top: 445, left: 10, width: 100, height: 50 },
+            { id: 'wxapp', page: 'wxappPage', title: '微信小程序', top: 445, left: 120, width: 100, height: 50 },
+            { id: 'reserve', page: 'reservePage', title: '新歌预约', top: 445, left: 230, width: 100, height: 50 },
+            { id: 'module1', page: 'module1Page', title: '编辑精选', top: 570, left: 10, width: 320, height: 200 },
+            { id: 'module2', page: 'module2Page', title: '热歌榜', top: 780, left: 10, width: 320, height: 280 },
+            { id: 'module3', page: 'module3Page', title: '新歌速递', top: 1070, left: 10, width: 320, height: 280 },
+            { id: 'module4', page: 'module4Page', title: '热门专区', top: 1360, left: 10, width: 320, height: 240 },
+            { id: 'module5', page: 'module5Page', title: '一人一首金曲', top: 1610, left: 10, width: 320, height: 200 },
+            { id: 'module6', page: 'module6Page', title: '至臻名人堂', top: 1820, left: 10, width: 320, height: 200 },
+            { id: 'module7', page: 'module7Page', title: '国风国潮', top: 2030, left: 10, width: 320, height: 200 },
+            { id: 'module8', page: 'module8Page', title: '热门综艺', top: 2240, left: 10, width: 320, height: 200 },
+            { id: 'module9', page: 'module9Page', title: '热门游戏', top: 2450, left: 10, width: 320, height: 200 },
+            { id: 'module10', page: 'module10Page', title: '热门影视', top: 2660, left: 10, width: 320, height: 200 },
+            { id: 'module11', page: 'module11Page', title: '词曲名家集', top: 2870, left: 10, width: 320, height: 200 },
+            { id: 'module12', page: 'module12Page', title: '厂牌音乐', top: 3080, left: 10, width: 320, height: 200 },
+            { id: 'module13', page: 'module13Page', title: '数字专辑', top: 3290, left: 10, width: 320, height: 220 },
+            { id: 'module14', page: 'module14Page', title: '新碟上架', top: 3520, left: 10, width: 320, height: 160 },
+            { id: 'module15', page: 'module15Page', title: '新歌预约', top: 3690, left: 10, width: 320, height: 220 },
+            { id: 'module16', page: 'module16Page', title: '最新MV', top: 3920, left: 10, width: 320, height: 200 }
+        ];
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => {
@@ -960,33 +936,67 @@
             document.querySelector('.screen').scrollTop = 0;
         }
 
-        window.onload = function() {
-            const img = document.getElementById('mainImage');
-            const container = document.getElementById('imageContainer');
+        function createClickableAreas() {
+            const wrapper = document.getElementById('imageWrapper');
+            const image = document.getElementById('mainImage');
             
-            if (img && container) {
-                img.onload = function() {
-                    const imgWidth = img.naturalWidth;
-                    const imgHeight = img.naturalHeight;
-                    const displayWidth = img.clientWidth;
-                    const displayHeight = img.clientHeight;
-                    
-                    console.log('图片尺寸:', imgWidth, 'x', imgHeight);
-                    console.log('显示尺寸:', displayWidth, 'x', displayHeight);
-                };
-            }
-        };
+            if (!wrapper || !image) return;
+            if (!image.complete || !image.naturalWidth) return;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const img = document.getElementById('mainImage');
-                if (img.complete) {
-                    console.log('图片已加载');
-                    console.log('原始尺寸:', img.naturalWidth, 'x', img.naturalHeight);
-                    console.log('显示尺寸:', img.clientWidth, 'x', img.clientHeight);
-                }
-            }, 1000);
+            wrapper.querySelectorAll('.clickable-area').forEach(area => area.remove());
+
+            const displayWidth = image.clientWidth;
+            const displayHeight = image.clientHeight;
+            const naturalWidth = image.naturalWidth;
+            const naturalHeight = image.naturalHeight;
+            
+            const scaleX = displayWidth / naturalWidth;
+            const scaleY = displayHeight / naturalHeight;
+
+            clickableAreas.forEach(area => {
+                const div = document.createElement('div');
+                div.className = 'clickable-area';
+                div.setAttribute('data-page', area.page);
+                div.setAttribute('title', area.title);
+                
+                div.style.top = (area.top * scaleY) + 'px';
+                div.style.left = (area.left * scaleX) + 'px';
+                div.style.width = (area.width * scaleX) + 'px';
+                div.style.height = (area.height * scaleY) + 'px';
+                
+                div.addEventListener('click', function() {
+                    showPage(this.getAttribute('data-page'));
+                });
+
+                div.addEventListener('mouseenter', function(e) {
+                    const tooltip = document.getElementById('tooltip');
+                    tooltip.textContent = this.getAttribute('title');
+                    tooltip.style.left = e.pageX + 10 + 'px';
+                    tooltip.style.top = e.pageY + 10 + 'px';
+                    tooltip.classList.add('show');
+                });
+
+                div.addEventListener('mouseleave', function() {
+                    document.getElementById('tooltip').classList.remove('show');
+                });
+
+                wrapper.appendChild(div);
+            });
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(createClickableAreas, 800);
         });
+
+        document.getElementById('mainImage') && document.getElementById('mainImage').addEventListener('load', function() {
+            setTimeout(createClickableAreas, 100);
+        });
+
+        if (document.readyState === 'complete') {
+            setTimeout(createClickableAreas, 800);
+        }
+
+        setTimeout(createClickableAreas, 1500);
     </script>
 </body>
 </html>
