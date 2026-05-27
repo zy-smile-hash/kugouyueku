@@ -3,63 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>酷狗乐库功能模块 - 交互演示</title>
+    <title>酷狗乐库 - 交互演示</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             padding: 20px;
         }
-
+        
         .header {
             text-align: center;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .phone-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+        .header h1 { font-size: 24px; margin-bottom: 8px; }
+        .header p { font-size: 13px; opacity: 0.9; }
+        
+        .phone-container { display: flex; flex-direction: column; align-items: center; }
+        
         .phone-frame {
             width: 375px;
             height: 812px;
             background: #000;
             border-radius: 50px;
             padding: 15px;
-            box-shadow: 
-                0 50px 100px rgba(0, 0, 0, 0.3),
-                inset 0 0 0 2px #333,
-                inset 0 0 0 4px #1a1a1a;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
         }
-
+        
         .notch {
             position: absolute;
             top: 0;
@@ -71,7 +49,7 @@
             border-radius: 0 0 20px 20px;
             z-index: 100;
         }
-
+        
         .screen {
             width: 100%;
             height: 100%;
@@ -80,7 +58,7 @@
             overflow: hidden;
             position: relative;
         }
-
+        
         .page {
             position: absolute;
             top: 0;
@@ -92,765 +70,837 @@
             visibility: hidden;
             transition: opacity 0.3s ease;
         }
-
-        .page.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .page::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .page::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 2px;
-        }
-
-        .page::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 2px;
-        }
-
-        .main-page {
-            background: #f5f5f5;
-        }
-
-        .main-page .image-container {
+        .page.active { opacity: 1; visibility: visible; }
+        .page::-webkit-scrollbar { width: 3px; }
+        .page::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+        
+        /* Main page with image */
+        .main-page { background: #f5f5f5; }
+        .main-page .image-wrapper {
+            position: relative;
             width: 100%;
             min-height: 100%;
-            position: relative;
         }
-
         .main-page img {
             width: 100%;
             height: auto;
             display: block;
         }
-
-        /* Clickable zones */
-        .clickable-area {
+        
+        /* Invisible clickable buttons */
+        .btn-clickable {
             position: absolute;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px dashed transparent;
-            border-radius: 8px;
+            /* border: 1px dashed red; */ /* Debug: uncomment to see button areas */
         }
-
-        .clickable-area:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .clickable-area.disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        /* Zone positions based on 907x11285 image ratio */
-        .zone-nav {
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8%;
-        }
-
-        .zone-banner {
-            top: 8%;
-            left: 0;
-            width: 100%;
-            height: 15%;
-        }
-
-        .zone-quick-entry {
-            top: 23%;
-            left: 0;
-            width: 100%;
-            height: 15%;
-        }
-
-        .zone-content {
-            top: 38%;
-            left: 0;
-            width: 100%;
-            height: 45%;
-        }
-
-        .zone-global {
-            top: 83%;
-            left: 0;
-            width: 100%;
-            height: 17%;
-        }
-
-        /* Sub-page styles */
-        .sub-page {
-            background: #fff;
-        }
-
+        
+        /* Sub page styles */
+        .sub-page { background: #fff; }
         .sub-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .back-btn {
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .sub-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .sub-content {
-            padding: 20px 15px;
-        }
-
-        .feature-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .feature-item {
-            background: #f8f8f8;
-            border-radius: 12px;
             padding: 15px;
             display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-
-        .feature-info {
-            flex: 1;
+        .back-btn {
+            width: 28px; height: 28px;
+            background: rgba(255,255,255,0.2);
+            border: none; border-radius: 50%;
+            color: white; font-size: 16px;
+            cursor: pointer;
         }
-
-        .feature-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .feature-desc {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .feature-status {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-top: 8px;
-        }
-
-        .status-clickable {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status-disabled {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        /* Detail sections */
-        .detail-section {
+        .back-btn:hover { background: rgba(255,255,255,0.3); }
+        .sub-title { font-size: 16px; font-weight: 600; }
+        
+        .sub-content { padding: 20px 15px; }
+        
+        /* Card style */
+        .card {
             background: #fff;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-
-        .detail-section h3 {
-            font-size: 16px;
+        .card h3 {
+            font-size: 15px;
             color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #667eea;
         }
-
-        .detail-section p {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.8;
+        .card p { font-size: 14px; color: #666; line-height: 1.7; }
+        
+        /* Feature list */
+        .feature-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-
-        .function-group {
+        .feature-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .feature-info { flex: 1; }
+        .feature-name { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 3px; }
+        .feature-desc { font-size: 12px; color: #666; }
+        
+        /* Ad page specific */
+        .ad-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .ad-icon {
+            font-size: 80px;
             margin-bottom: 20px;
         }
-
-        .function-group h4 {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 10px;
-            padding-left: 10px;
-            border-left: 3px solid #667eea;
+        .ad-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
         }
-
-        .function-tags {
+        .ad-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .ad-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 25px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .ad-btn:hover { transform: scale(1.05); }
+        .ad-timer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+        
+        /* Search page */
+        .search-box {
+            padding: 15px;
+            background: #f5f5f5;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-history {
+            padding: 15px;
+        }
+        .search-history h4 {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        .history-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-
-        .function-tag {
-            background: #e3f2fd;
-            color: #1565c0;
+        .history-tag {
+            background: #f0f0f0;
             padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666;
         }
-
-        .function-tag.disabled {
-            background: #f5f5f5;
-            color: #999;
-        }
-
-        .interaction-flow {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .interaction-flow h5 {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .flow-step {
+        
+        /* List items */
+        .list-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 13px;
-            color: #555;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
-
-        .flow-step:not(:last-child) {
-            border-bottom: 1px dashed #ddd;
-        }
-
-        .step-num {
-            width: 24px;
-            height: 24px;
-            background: #667eea;
-            color: white;
-            border-radius: 50%;
+        .list-item:last-child { border-bottom: none; }
+        .list-icon {
+            width: 40px; height: 40px;
+            background: #f5f5f5;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 18px;
+            margin-right: 12px;
         }
-
-        .footer {
-            margin-top: 30px;
+        .list-info { flex: 1; }
+        .list-title { font-size: 14px; color: #333; margin-bottom: 2px; }
+        .list-sub { font-size: 12px; color: #999; }
+        
+        /* Mini player */
+        .mini-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px 15px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .player-cover {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .player-info { flex: 1; }
+        .player-title { font-size: 13px; color: #333; }
+        .player-artist { font-size: 11px; color: #999; }
+        .player-controls { display: flex; gap: 15px; }
+        .control-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
             color: white;
-            text-align: center;
-            font-size: 12px;
-            opacity: 0.8;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-
+        .toast.show { opacity: 1; }
+        
         @media (max-width: 420px) {
-            .phone-frame {
-                transform: scale(0.85);
-            }
-        }
-
-        @media (max-width: 380px) {
-            .phone-frame {
-                transform: scale(0.75);
-            }
+            .phone-frame { transform: scale(0.85); }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🎵 酷狗乐库功能交互演示</h1>
-        <p>点击下方手机中的功能区域查看详情</p>
+        <h1>🎵 酷狗乐库</h1>
+        <p>点击各功能按钮体验交互</p>
     </div>
-
+    
     <div class="phone-container">
         <div class="phone-frame">
             <div class="notch"></div>
             <div class="screen">
-                <!-- Main Page -->
+                <!-- ========== 主页面 ========== -->
                 <div class="page main-page active" id="mainPage">
-                    <div class="image-container">
-                        <img src="yuelu_image.png" alt="酷狗乐库功能模块">
-                        <div class="clickable-area zone-nav" onclick="navigateTo('nav')"></div>
-                        <div class="clickable-area zone-banner" onclick="navigateTo('banner')"></div>
-                        <div class="clickable-area zone-quick-entry" onclick="navigateTo('quickEntry')"></div>
-                        <div class="clickable-area zone-content" onclick="navigateTo('content')"></div>
-                        <div class="clickable-area zone-global" onclick="navigateTo('global')"></div>
+                    <div class="image-wrapper">
+                        <img src="yuelu_image.png" alt="酷狗乐库" id="mainImage">
+                        
+                        <!-- 顶部导航区按钮 -->
+                        <!-- 搜索框 -->
+                        <div class="btn-clickable" style="top: 2%; left: 3%; width: 55%; height: 3%;" onclick="navigateTo('search')"></div>
+                        <!-- "免"字广告按钮 -->
+                        <div class="btn-clickable" style="top: 2%; right: 3%; width: 12%; height: 3%;" onclick="navigateTo('adPage')"></div>
+                        <!-- 消息通知 -->
+                        <div class="btn-clickable" style="top: 2%; right: 17%; width: 8%; height: 3%;" onclick="navigateTo('message')"></div>
+                        <!-- 用户头像 -->
+                        <div class="btn-clickable" style="top: 2%; right: 3%; width: 8%; height: 3%;" onclick="navigateTo('profile')"></div>
+                        
+                        <!-- 快捷功能入口区按钮 -->
+                        <!-- 每日推荐 -->
+                        <div class="btn-clickable" style="top: 26%; left: 5%; width: 18%; height: 6%;" onclick="navigateTo('dailyRecommend')"></div>
+                        <!-- 歌单 -->
+                        <div class="btn-clickable" style="top: 26%; left: 27%; width: 18%; height: 6%;" onclick="navigateTo('playlist')"></div>
+                        <!-- 电台 -->
+                        <div class="btn-clickable" style="top: 26%; left: 49%; width: 18%; height: 6%;" onclick="navigateTo('radio')"></div>
+                        <!-- 排行榜 -->
+                        <div class="btn-clickable" style="top: 26%; left: 71%; width: 18%; height: 6%;" onclick="navigateTo('rank')"></div>
+                        <!-- MV -->
+                        <div class="btn-clickable" style="top: 34%; left: 5%; width: 18%; height: 6%;" onclick="navigateTo('mv')"></div>
+                        <!-- KTV -->
+                        <div class="btn-clickable" style="top: 34%; left: 27%; width: 18%; height: 6%;" onclick="navigateTo('ktv')"></div>
+                        <!-- 彩铃 -->
+                        <div class="btn-clickable" style="top: 34%; left: 49%; width: 18%; height: 6%;" onclick="navigateTo('ringtone')"></div>
+                        <!-- 有声 -->
+                        <div class="btn-clickable" style="top: 34%; left: 71%; width: 18%; height: 6%;" onclick="navigateTo('audiobook')"></div>
+                        
+                        <!-- 内容主分区按钮 -->
+                        <!-- 推荐歌单卡片 -->
+                        <div class="btn-clickable" style="top: 42%; left: 3%; width: 44%; height: 15%;" onclick="navigateTo('songlist1')"></div>
+                        <!-- 推荐歌曲1 -->
+                        <div class="btn-clickable" style="top: 59%; left: 3%; width: 94%; height: 5%;" onclick="navigateTo('song1')"></div>
+                        <!-- 新歌速递 -->
+                        <div class="btn-clickable" style="top: 65%; left: 3%; width: 94%; height: 5%;" onclick="navigateTo('newSong')"></div>
+                        <!-- 专辑推荐 -->
+                        <div class="btn-clickable" style="top: 71%; left: 3%; width: 94%; height: 5%;" onclick="navigateTo('album')"></div>
+                        <!-- 歌手推荐 -->
+                        <div class="btn-clickable" style="top: 77%; left: 3%; width: 94%; height: 5%;" onclick="navigateTo('artist')"></div>
+                        
+                        <!-- 全局体验区按钮 -->
+                        <!-- 乐库Tab -->
+                        <div class="btn-clickable" style="top: 90%; left: 5%; width: 18%; height: 8%;" onclick="showToast('当前已在乐库页面')"></div>
+                        <!-- 直播Tab -->
+                        <div class="btn-clickable" style="top: 90%; left: 27%; width: 18%; height: 8%;" onclick="navigateTo('live')"></div>
+                        <!-- 视频Tab -->
+                        <div class="btn-clickable" style="top: 90%; left: 49%; width: 18%; height: 8%;" onclick="navigateTo('video')"></div>
+                        <!-- 我的Tab -->
+                        <div class="btn-clickable" style="top: 90%; left: 71%; width: 18%; height: 8%;" onclick="navigateTo('mine')"></div>
+                        <!-- 迷你播放器 -->
+                        <div class="btn-clickable" style="top: 83%; left: 3%; width: 65%; height: 6%;" onclick="navigateTo('player')"></div>
                     </div>
                 </div>
-
-                <!-- 01 顶部导航区 -->
-                <div class="page sub-page" id="navPage">
+                
+                <!-- ========== "免"字广告页 ========== -->
+                <div class="page sub-page" id="adPage">
                     <div class="sub-header">
                         <button class="back-btn" onclick="goBack()">←</button>
-                        <span class="sub-title">01 顶部导航区</span>
+                        <span class="sub-title">免费VIP体验</span>
                     </div>
                     <div class="sub-content">
-                        <div class="detail-section">
-                            <h3>功能概述</h3>
-                            <p>顶部导航区包含搜索、消息通知、用户头像等核心入口，提供全局快捷操作能力。</p>
-                        </div>
-
-                        <div class="detail-section">
-                            <h3>功能列表</h3>
-                            <div class="feature-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">🔍</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">搜索框</div>
-                                        <div class="feature-desc">支持搜索歌曲、歌手、专辑歌词等内容</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📢</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">消息通知</div>
-                                        <div class="feature-desc">显示系统消息、互动消息、版本更新等通知</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">👤</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">用户头像</div>
-                                        <div class="feature-desc">登录用户可查看个人信息、会员状态、设置等</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
+                        <div class="ad-container">
+                            <div class="ad-icon">🎁</div>
+                            <div class="ad-title">看完广告 领取VIP权益</div>
+                            <div class="ad-desc">
+                                观看30秒广告，即可获得<br>
+                                <strong style="color: #667eea;">VIP歌曲免费听 30分钟</strong><br><br>
+                                每日可领取3次
                             </div>
+                            <button class="ad-btn" onclick="playAd()">观看广告</button>
+                            <div class="ad-timer" id="adTimer"></div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>交互逻辑</h3>
-                            <div class="interaction-flow">
-                                <div class="flow-step">
-                                    <span class="step-num">1</span>
-                                    <span>点击搜索框 → 展开搜索页面</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">2</span>
-                                    <span>输入关键词 → 实时显示搜索建议</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">3</span>
-                                    <span>点击搜索结果 → 进入歌曲/歌手详情页</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">4</span>
-                                    <span>点击消息通知 → 进入消息列表页</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">5</span>
-                                    <span>点击用户头像 → 进入个人中心页</span>
-                                </div>
-                            </div>
+                        
+                        <div class="card">
+                            <h3>广告说明</h3>
+                            <p>• 广告时长：30秒<br>
+                            • 奖励：VIP歌曲免费听30分钟<br>
+                            • 每日限制：3次<br>
+                            • 有效期：领取后24小时内有效</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- 02 运营流量区 -->
-                <div class="page sub-page" id="bannerPage">
+                
+                <!-- ========== 搜索页 ========== -->
+                <div class="page sub-page" id="searchPage">
                     <div class="sub-header">
                         <button class="back-btn" onclick="goBack()">←</button>
-                        <span class="sub-title">02 运营流量区</span>
+                        <span class="sub-title">搜索</span>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="搜索歌曲、歌手、歌词...">
+                    </div>
+                    <div class="search-history">
+                        <h4>搜索历史</h4>
+                        <div class="history-tags">
+                            <span class="history-tag">周杰伦</span>
+                            <span class="history-tag">告白气球</span>
+                            <span class="history-tag">夜曲</span>
+                            <span class="history-tag">薛之谦</span>
+                            <span class="history-tag">演员</span>
+                        </div>
                     </div>
                     <div class="sub-content">
-                        <div class="detail-section">
-                            <h3>功能概述</h3>
-                            <p>运营流量区展示Banner轮播图、运营活动入口、新歌推荐等运营内容，用于引导用户参与活动或发现新内容。</p>
-                        </div>
-
-                        <div class="detail-section">
-                            <h3>功能列表</h3>
-                            <div class="feature-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎠</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">Banner轮播</div>
-                                        <div class="feature-desc">展示新专辑、会员活动、节日运营等内容，支持自动轮播</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎁</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">活动入口</div>
-                                        <div class="feature-desc">展示当前运营活动，如签到、抽奖、礼包等</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎵</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">新歌推荐</div>
-                                        <div class="feature-desc">展示最新上架的音乐内容</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📰</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">热点资讯</div>
-                                        <div class="feature-desc">展示音乐圈热点新闻、明星动态等</div>
-                                        <span class="feature-status status-disabled">不可点击</span>
-                                    </div>
+                        <div class="card">
+                            <h3>热搜榜单</h3>
+                            <div class="list-item">
+                                <div class="list-icon">🔥</div>
+                                <div class="list-info">
+                                    <div class="list-title">1. 成都</div>
+                                    <div class="list-sub">赵雷 - 歌曲</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="detail-section">
-                            <h3>交互逻辑</h3>
-                            <div class="interaction-flow">
-                                <div class="flow-step">
-                                    <span class="step-num">1</span>
-                                    <span>Banner自动轮播，间隔3-5秒</span>
+                            <div class="list-item">
+                                <div class="list-icon">🔥</div>
+                                <div class="list-info">
+                                    <div class="list-title">2. 起风了</div>
+                                    <div class="list-sub">买辣椒也用券 - 歌曲</div>
                                 </div>
-                                <div class="flow-step">
-                                    <span class="step-num">2</span>
-                                    <span>左右滑动可手动切换Banner</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">3</span>
-                                    <span>点击Banner → 进入活动详情页</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">4</span>
-                                    <span>点击活动入口 → 直接参与活动</span>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-icon">🔥</div>
+                                <div class="list-info">
+                                    <div class="list-title">3. 漠河舞厅</div>
+                                    <div class="list-sub">柳爽 - 歌曲</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 03 快捷功能入口区 -->
-                <div class="page sub-page" id="quickEntryPage">
+                
+                <!-- ========== 消息通知页 ========== -->
+                <div class="page sub-page" id="messagePage">
                     <div class="sub-header">
                         <button class="back-btn" onclick="goBack()">←</button>
-                        <span class="sub-title">03 快捷功能入口区</span>
+                        <span class="sub-title">消息通知</span>
                     </div>
                     <div class="sub-content">
-                        <div class="detail-section">
-                            <h3>功能概述</h3>
-                            <p>快捷功能入口区提供用户高频使用的核心功能入口，如每日推荐、歌单、电台、排行榜、MV等。</p>
-                        </div>
-
-                        <div class="detail-section">
-                            <h3>功能列表</h3>
-                            <div class="feature-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">📅</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">每日推荐</div>
-                                        <div class="feature-desc">基于用户听歌历史推荐个性化歌曲</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📋</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">歌单</div>
-                                        <div class="feature-desc">各类主题歌单入口，如热门歌单、心情歌单等</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📻</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">电台</div>
-                                        <div class="feature-desc">个性化电台服务，相似歌曲自动播放</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🏆</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">排行榜</div>
-                                        <div class="feature-desc">各类音乐榜单，如热歌榜、新歌榜、飙升榜等</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎬</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">MV</div>
-                                        <div class="feature-desc">音乐视频播放入口</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎤</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">KTV</div>
-                                        <div class="feature-desc">KTV唱歌功能入口</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📱</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">彩铃</div>
-                                        <div class="feature-desc">手机彩铃设置服务</div>
-                                        <span class="feature-status status-disabled">不可点击</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎧</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">有声</div>
-                                        <div class="feature-desc">有声读物、电台节目等内容</div>
-                                        <span class="feature-status status-disabled">不可点击</span>
-                                    </div>
-                                </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📢</div>
+                            <div class="feature-info">
+                                <div class="feature-name">系统通知</div>
+                                <div class="feature-desc">版本更新提示、新功能介绍</div>
                             </div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>交互逻辑</h3>
-                            <div class="interaction-flow">
-                                <div class="flow-step">
-                                    <span class="step-num">1</span>
-                                    <span>点击功能入口 → 进入对应功能页面</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">2</span>
-                                    <span>每日推荐 → 个性化歌曲列表</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">3</span>
-                                    <span>歌单 → 歌单分类列表页</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">4</span>
-                                    <span>电台 → 电台播放页面</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">5</span>
-                                    <span>排行榜 → 榜单详情页</span>
-                                </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">💬</div>
+                            <div class="feature-info">
+                                <div class="feature-name">互动消息</div>
+                                <div class="feature-desc">评论、点赞、关注等通知</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🎵</div>
+                            <div class="feature-info">
+                                <div class="feature-name">歌曲更新</div>
+                                <div class="feature-desc">关注的歌手发布新歌提醒</div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 04 内容主分区 -->
-                <div class="page sub-page" id="contentPage">
+                
+                <!-- ========== 个人中心页 ========== -->
+                <div class="page sub-page" id="profilePage">
                     <div class="sub-header">
                         <button class="back-btn" onclick="goBack()">←</button>
-                        <span class="sub-title">04 内容主分区</span>
+                        <span class="sub-title">个人中心</span>
                     </div>
                     <div class="sub-content">
-                        <div class="detail-section">
-                            <h3>功能概述</h3>
-                            <p>内容主分区是乐库的核心内容展示区域，包含推荐歌单、推荐歌曲、新歌速递、专辑推荐等内容模块。</p>
+                        <div class="card" style="text-align: center; padding: 30px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">👤</div>
+                            <div style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">游客用户</div>
+                            <div style="font-size: 13px; color: #999;">登录后享受更多权益</div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>功能列表</h3>
-                            <div class="feature-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">⭐</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">推荐歌单</div>
-                                        <div class="feature-desc">精选优质歌单推荐，支持左右滑动浏览</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎶</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">推荐歌曲</div>
-                                        <div class="feature-desc">根据用户喜好推荐的歌曲列表</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🚀</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">新歌速递</div>
-                                        <div class="feature-desc">最新发布的歌曲列表</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">💿</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">专辑推荐</div>
-                                        <div class="feature-desc">最新专辑推荐展示</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">👤</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">歌手推荐</div>
-                                        <div class="feature-desc">热门歌手推荐展示</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🏷️</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">分类浏览</div>
-                                        <div class="feature-desc">按流派、语种、年代等分类浏览</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⭐</div>
+                            <div class="feature-info">
+                                <div class="feature-name">会员中心</div>
+                                <div class="feature-desc">开通VIP享无损音质</div>
                             </div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>交互逻辑</h3>
-                            <div class="interaction-flow">
-                                <div class="flow-step">
-                                    <span class="step-num">1</span>
-                                    <span>上下滑动浏览内容模块</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">2</span>
-                                    <span>点击歌单卡片 → 进入歌单详情页</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">3</span>
-                                    <span>点击歌曲 → 播放歌曲并显示播放控件</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">4</span>
-                                    <span>点击更多/换一批 → 加载更多内容</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">5</span>
-                                    <span>左滑卡片 → 显示分享/收藏等操作</span>
-                                </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📥</div>
+                            <div class="feature-info">
+                                <div class="feature-name">下载管理</div>
+                                <div class="feature-desc">管理已下载的歌曲</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">❤️</div>
+                            <div class="feature-info">
+                                <div class="feature-name">我的收藏</div>
+                                <div class="feature-desc">收藏的歌曲和歌单</div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 05 全局体验区 -->
-                <div class="page sub-page" id="globalPage">
+                
+                <!-- ========== 每日推荐页 ========== -->
+                <div class="page sub-page" id="dailyRecommendPage">
                     <div class="sub-header">
                         <button class="back-btn" onclick="goBack()">←</button>
-                        <span class="sub-title">05 全局体验区</span>
+                        <span class="sub-title">每日推荐</span>
                     </div>
                     <div class="sub-content">
-                        <div class="detail-section">
-                            <h3>功能概述</h3>
-                            <p>全局体验区提供全局导航栏、播放控制栏等贯穿整个APP的通用功能模块。</p>
+                        <div class="card" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">📅</div>
+                            <div style="font-size: 18px; font-weight: 600;">根据你的听歌口味推荐</div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>功能列表</h3>
-                            <div class="feature-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">🏠</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">底部导航栏</div>
-                                        <div class="feature-desc">包含乐库、直播、视频、我的等主要Tab导航</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🎛️</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">迷你播放器</div>
-                                        <div class="feature-desc">显示当前播放歌曲，点击展开播放器</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">⏸️</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">播放控制</div>
-                                        <div class="feature-desc">播放/暂停、上一首、下一首控制</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">📃</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">播放列表</div>
-                                        <div class="feature-desc">查看和管理当前播放队列</div>
-                                        <span class="feature-status status-clickable">可点击跳转</span>
-                                    </div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🔊</div>
-                                    <div class="feature-info">
-                                        <div class="feature-name">音量控制</div>
-                                        <div class="feature-desc">调节媒体音量大小</div>
-                                        <span class="feature-status status-disabled">不可点击</span>
-                                    </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎵</div>
+                            <div class="list-info">
+                                <div class="list-title">1. 晴天 - 周杰伦</div>
+                                <div class="list-sub">根据你常听的风格推荐</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎵</div>
+                            <div class="list-info">
+                                <div class="list-title">2. 稻香 - 周杰伦</div>
+                                <div class="list-sub">根据你常听的风格推荐</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎵</div>
+                            <div class="list-info">
+                                <div class="list-title">3. 蒲公英的约定 - 周杰伦</div>
+                                <div class="list-sub">根据你常听的风格推荐</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 歌单页 ========== -->
+                <div class="page sub-page" id="playlistPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">歌单</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card">
+                            <h3>歌单分类</h3>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+                                <span class="history-tag" style="background: #e3f2fd;">流行</span>
+                                <span class="history-tag" style="background: #fce4ec;">伤感</span>
+                                <span class="history-tag" style="background: #e8f5e9;">治愈</span>
+                                <span class="history-tag" style="background: #fff3e0;">怀旧</span>
+                                <span class="history-tag" style="background: #f3e5f5;">说唱</span>
+                                <span class="history-tag" style="background: #e0f7fa;">电子</span>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎧</div>
+                            <div class="list-info">
+                                <div class="list-title">热门歌单</div>
+                                <div class="list-sub">播放量 2.3亿</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎧</div>
+                            <div class="list-info">
+                                <div class="list-title">欧美热歌</div>
+                                <div class="list-sub">播放量 1.8亿</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 电台页 ========== -->
+                <div class="page sub-page" id="radioPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">私人FM</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 80px; margin-bottom: 15px;">📻</div>
+                            <div style="font-size: 16px; font-weight: 600;">正在播放</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 5px;">根据你的喜好自动推荐歌曲</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button style="background: #ccc; color: #666; padding: 12px 30px; border: none; border-radius: 20px; margin: 0 5px;">⏮</button>
+                            <button style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 40px; border: none; border-radius: 25px; margin: 0 5px; font-size: 20px;">▶</button>
+                            <button style="background: #ccc; color: #666; padding: 12px 30px; border: none; border-radius: 20px; margin: 0 5px;">⏭</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 排行榜页 ========== -->
+                <div class="page sub-page" id="rankPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">排行榜</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #ff6b6b; color: white;">🔥</div>
+                            <div class="list-info">
+                                <div class="list-title">热歌榜</div>
+                                <div class="list-sub">实时更新</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #4ecdc4; color: white;">🆕</div>
+                            <div class="list-info">
+                                <div class="list-title">新歌榜</div>
+                                <div class="list-sub">最新上架</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #ffe66d; color: #333;">🚀</div>
+                            <div class="list-info">
+                                <div class="list-title">飙升榜</div>
+                                <div class="list-sub">热度上升最快</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #a8e6cf; color: white;">🎤</div>
+                            <div class="list-info">
+                                <div class="list-title">网络红歌</div>
+                                <div class="list-sub">热门网络歌曲</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== MV页 ========== -->
+                <div class="page sub-page" id="mvPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">MV</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">🎬</div>
+                            <div style="font-size: 16px;">MV广场</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">🎵</div>
+                            <div class="list-info">
+                                <div class="list-title">MV推荐</div>
+                                <div class="list-sub">精选热门MV</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== KTV页 ========== -->
+                <div class="page sub-page" id="ktvPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">KTV</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 40px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">🎤</div>
+                            <div style="font-size: 16px;">在线KTV</div>
+                            <div style="font-size: 13px; color: #666; margin-top: 5px;">随时随地唱出好声音</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 彩铃页 ========== -->
+                <div class="page sub-page" id="ringtonePage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">彩铃</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card">
+                            <h3>功能说明</h3>
+                            <p>设置手机彩铃，让你的来电铃声与众不同</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 有声页 ========== -->
+                <div class="page sub-page" id="audiobookPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">有声</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card">
+                            <h3>功能说明</h3>
+                            <p>有声读物、电台节目、相声评书等音频内容</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 歌曲详情页 ========== -->
+                <div class="page sub-page" id="song1Page">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">歌曲播放</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 50px;">
+                            <div style="font-size: 100px; margin-bottom: 20px;">🎵</div>
+                            <div style="font-size: 20px; font-weight: 600; margin-bottom: 5px;">歌曲名称</div>
+                            <div style="font-size: 14px; color: #666;">歌手名称</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px 50px; border: none; border-radius: 25px; font-size: 16px;">▶ 播放</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 歌单详情页 ========== -->
+                <div class="page sub-page" id="songlist1Page">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">歌单详情</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card">
+                            <div style="display: flex; gap: 15px;">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px;">🎵</div>
+                                <div>
+                                    <div style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">推荐歌单名称</div>
+                                    <div style="font-size: 12px; color: #999;">播放量 1234万</div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="detail-section">
-                            <h3>交互逻辑</h3>
-                            <div class="interaction-flow">
-                                <div class="flow-step">
-                                    <span class="step-num">1</span>
-                                    <span>点击底部Tab → 切换到对应页面</span>
+                        <div class="list-item">
+                            <div class="list-icon">1</div>
+                            <div class="list-info">
+                                <div class="list-title">歌曲1</div>
+                                <div class="list-sub">歌手</div>
+                            </div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">2</div>
+                            <div class="list-info">
+                                <div class="list-title">歌曲2</div>
+                                <div class="list-sub">歌手</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 新歌速递页 ========== -->
+                <div class="page sub-page" id="newSongPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">新歌速递</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #e3f2fd;">🆕</div>
+                            <div class="list-info">
+                                <div class="list-title">最新歌曲</div>
+                                <div class="list-sub">刚刚发布</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 专辑推荐页 ========== -->
+                <div class="page sub-page" id="albumPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">专辑推荐</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #fce4ec;">💿</div>
+                            <div class="list-info">
+                                <div class="list-title">最新专辑</div>
+                                <div class="list-sub">热门专辑推荐</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 歌手推荐页 ========== -->
+                <div class="page sub-page" id="artistPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">歌手推荐</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="list-item">
+                            <div class="list-icon" style="background: #fff3e0;">👤</div>
+                            <div class="list-info">
+                                <div class="list-title">热门歌手</div>
+                                <div class="list-sub">发现你喜欢的歌手</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 播放器页 ========== -->
+                <div class="page sub-page" id="playerPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">正在播放</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 60px 20px;">
+                            <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 20px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; font-size: 80px;">🎵</div>
+                            <div style="font-size: 20px; font-weight: 600; margin-bottom: 5px;">歌曲名称</div>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 30px;">歌手名称</div>
+                            
+                            <div style="margin-bottom: 20px;">
+                                <div style="height: 4px; background: #f0f0f0; border-radius: 2px;">
+                                    <div style="width: 35%; height: 100%; background: #667eea; border-radius: 2px;"></div>
                                 </div>
-                                <div class="flow-step">
-                                    <span class="step-num">2</span>
-                                    <span>点击迷你播放器 → 展开完整播放页</span>
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #999; margin-top: 5px;">
+                                    <span>1:23</span>
+                                    <span>4:05</span>
                                 </div>
-                                <div class="flow-step">
-                                    <span class="step-num">3</span>
-                                    <span>点击播放/暂停 → 切换播放状态</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">4</span>
-                                    <span>点击播放列表 → 显示播放队列</span>
-                                </div>
-                                <div class="flow-step">
-                                    <span class="step-num">5</span>
-                                    <span>上滑迷你播放器 → 展开完整播放器</span>
-                                </div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: center; gap: 30px;">
+                                <button style="background: none; border: none; font-size: 30px;">⏮</button>
+                                <button style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; width: 60px; height: 60px; border: none; border-radius: 50%; font-size: 25px;">▶</button>
+                                <button style="background: none; border: none; font-size: 30px;">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 直播页 ========== -->
+                <div class="page sub-page" id="livePage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">直播</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 50px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">📺</div>
+                            <div style="font-size: 16px;">酷狗直播</div>
+                            <div style="font-size: 13px; color: #666; margin-top: 5px;">精彩直播内容</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 视频页 ========== -->
+                <div class="page sub-page" id="videoPage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">视频</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card" style="text-align: center; padding: 50px;">
+                            <div style="font-size: 60px; margin-bottom: 15px;">🎬</div>
+                            <div style="font-size: 16px;">视频专区</div>
+                            <div style="font-size: 13px; color: #666; margin-top: 5px;">音乐视频、MV、综艺</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========== 我的页 ========== -->
+                <div class="page sub-page" id="minePage">
+                    <div class="sub-header">
+                        <button class="back-btn" onclick="goBack()">←</button>
+                        <span class="sub-title">我的</span>
+                    </div>
+                    <div class="sub-content">
+                        <div class="card">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 50px; margin-bottom: 10px;">👤</div>
+                                <div style="font-size: 16px;">未登录</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📥</div>
+                            <div class="feature-info">
+                                <div class="feature-name">下载管理</div>
+                                <div class="feature-desc">已下载 0 首</div>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">❤️</div>
+                            <div class="feature-info">
+                                <div class="feature-name">我的收藏</div>
+                                <div class="feature-desc">收藏 0 首</div>
                             </div>
                         </div>
                     </div>
@@ -858,31 +908,47 @@
             </div>
         </div>
     </div>
-
-    <div class="footer">
-        <p>酷狗乐库功能交互演示 · Kugou Music Library</p>
+    
+    <div class="footer" style="margin-top: 20px; color: white; text-align: center; font-size: 12px; opacity: 0.8;">
+        <p>酷狗乐库交互演示</p>
     </div>
-
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+    
     <script>
         let currentPage = 'main';
         const pageHistory = [];
-
+        let adTimer = null;
+        let adCount = 0;
+        
         function navigateTo(page) {
             pageHistory.push(currentPage);
             
-            document.getElementById('mainPage').classList.remove('active');
-            document.getElementById('navPage').classList.remove('active');
-            document.getElementById('bannerPage').classList.remove('active');
-            document.getElementById('quickEntryPage').classList.remove('active');
-            document.getElementById('contentPage').classList.remove('active');
-            document.getElementById('globalPage').classList.remove('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             
             const pageMap = {
-                'nav': 'navPage',
-                'banner': 'bannerPage',
-                'quickEntry': 'quickEntryPage',
-                'content': 'contentPage',
-                'global': 'globalPage'
+                'adPage': 'adPage',
+                'search': 'searchPage',
+                'message': 'messagePage',
+                'profile': 'profilePage',
+                'dailyRecommend': 'dailyRecommendPage',
+                'playlist': 'playlistPage',
+                'radio': 'radioPage',
+                'rank': 'rankPage',
+                'mv': 'mvPage',
+                'ktv': 'ktvPage',
+                'ringtone': 'ringtonePage',
+                'audiobook': 'audiobookPage',
+                'song1': 'song1Page',
+                'songlist1': 'songlist1Page',
+                'newSong': 'newSongPage',
+                'album': 'albumPage',
+                'artist': 'artistPage',
+                'player': 'playerPage',
+                'live': 'livePage',
+                'video': 'videoPage',
+                'mine': 'minePage'
             };
             
             const targetPage = document.getElementById(pageMap[page]);
@@ -891,25 +957,41 @@
                 currentPage = page;
             }
         }
-
+        
         function goBack() {
             if (pageHistory.length > 0) {
                 const previousPage = pageHistory.pop();
                 
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 
+                const pageMap = {
+                    'adPage': 'adPage',
+                    'search': 'searchPage',
+                    'message': 'messagePage',
+                    'profile': 'profilePage',
+                    'dailyRecommend': 'dailyRecommendPage',
+                    'playlist': 'playlistPage',
+                    'radio': 'radioPage',
+                    'rank': 'rankPage',
+                    'mv': 'mvPage',
+                    'ktv': 'ktvPage',
+                    'ringtone': 'ringtonePage',
+                    'audiobook': 'audiobookPage',
+                    'song1': 'song1Page',
+                    'songlist1': 'songlist1Page',
+                    'newSong': 'newSongPage',
+                    'album': 'albumPage',
+                    'artist': 'artistPage',
+                    'player': 'playerPage',
+                    'live': 'livePage',
+                    'video': 'videoPage',
+                    'mine': 'minePage'
+                };
+                
                 if (previousPage === 'main') {
                     document.getElementById('mainPage').classList.add('active');
                     currentPage = 'main';
                 } else {
-                    const pageMap = {
-                        'nav': 'navPage',
-                        'banner': 'bannerPage',
-                        'quickEntry': 'quickEntryPage',
-                        'content': 'contentPage',
-                        'global': 'globalPage'
-                    };
-                    
                     const targetPage = document.getElementById(pageMap[previousPage]);
                     if (targetPage) {
                         targetPage.classList.add('active');
@@ -917,6 +999,39 @@
                     }
                 }
             }
+        }
+        
+        function playAd() {
+            if (adCount >= 3) {
+                showToast('今日观看次数已用完，明天再来吧！');
+                return;
+            }
+            
+            const timer = document.getElementById('adTimer');
+            let seconds = 30;
+            
+            timer.textContent = `广告播放中... ${seconds}秒`;
+            
+            adTimer = setInterval(() => {
+                seconds--;
+                if (seconds > 0) {
+                    timer.textContent = `广告播放中... ${seconds}秒`;
+                } else {
+                    clearInterval(adTimer);
+                    adCount++;
+                    timer.textContent = '';
+                    showToast(`恭喜！获得VIP歌曲免费听30分钟 (今日剩余${3 - adCount}次)`);
+                }
+            }, 1000);
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
         }
     </script>
 </body>
