@@ -29,7 +29,7 @@
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -47,11 +47,9 @@
             background: #000;
             border-radius: 50px;
             padding: 15px;
-            box-shadow: 
-                0 50px 100px rgba(0, 0, 0, 0.3),
-                inset 0 0 0 2px #333,
-                inset 0 0 0 4px #1a1a1a;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.3), inset 0 0 0 2px #333, inset 0 0 0 4px #1a1a1a;
             position: relative;
+            overflow: hidden;
         }
 
         .notch {
@@ -63,7 +61,7 @@
             height: 30px;
             background: #000;
             border-radius: 0 0 20px 20px;
-            z-index: 10;
+            z-index: 100;
         }
 
         .screen {
@@ -71,35 +69,146 @@
             height: 100%;
             background: #fff;
             border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
             overflow-y: auto;
             overflow-x: hidden;
-            position: relative;
         }
 
-        .screen::-webkit-scrollbar {
-            width: 4px;
+        .page.hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .screen::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 2px;
+        /* 首页样式 */
+        .home-content {
+            padding: 40px 15px 15px;
         }
 
-        .screen::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 2px;
-        }
-
-        .image-container {
-            width: 100%;
-            min-height: 100%;
-            position: relative;
-        }
-
-        .image-container img {
+        .home-content img {
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        /* 热区按钮 */
+        .hotspots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding-top: 40px;
+        }
+
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            background: transparent;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .hotspot:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 二级页面样式 */
+        .detail-page {
+            padding: 50px 20px 20px;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .detail-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .detail-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .detail-card h3 {
+            font-size: 16px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .detail-card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-list li strong {
+            color: #764ba2;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .feature-list li span {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .demo-screenshot {
+            width: 100%;
+            background: #e9ecef;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
 
         .footer {
@@ -121,6 +230,21 @@
                 transform: scale(0.75);
             }
         }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #667eea;
+            font-size: 12px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
     </style>
 </head>
 <body>
@@ -132,15 +256,322 @@
         <div class="phone-frame">
             <div class="notch"></div>
             <div class="screen">
-                <div class="image-container">
-                    <img src="yuelu_image.png" alt="酷狗乐库功能模块拆解">
+                <!-- 首页 -->
+                <div class="page" id="homePage">
+                    <div class="home-content">
+                        <img src="yuelu_image.png" alt="酷狗乐库功能模块拆解">
+                    </div>
+                    <div class="hotspots">
+                        <!-- 顶部导航区 -->
+                        <div class="hotspot" onclick="goToPage('searchPage')" style="top: 60px; left: 20px; width: 280px; height: 40px;"></div>
+                        <div class="hotspot" onclick="goToPage('rankPage')" style="top: 120px; left: 30px; width: 70px; height: 30px;"></div>
+                        <div class="hotspot" onclick="goToPage('songlistPage')" style="top: 120px; left: 110px; width: 70px; height: 30px;"></div>
+                        <div class="hotspot" onclick="goToPage('singerPage')" style="top: 120px; left: 190px; width: 70px; height: 30px;"></div>
+                        
+                        <!-- 轮播图区域 -->
+                        <div class="hotspot" onclick="goToPage('bannerPage')" style="top: 170px; left: 20px; width: 300px; height: 120px;"></div>
+                        
+                        <!-- 功能图标区 -->
+                        <div class="hotspot" onclick="goToPage('localPage')" style="top: 310px; left: 30px; width: 60px; height: 60px;"></div>
+                        <div class="hotspot" onclick="goToPage('radioPage')" style="top: 310px; left: 105px; width: 60px; height: 60px;"></div>
+                        <div class="hotspot" onclick="goToPage('videoPage')" style="top: 310px; left: 180px; width: 60px; height: 60px;"></div>
+                        <div class="hotspot" onclick="goToPage('djPage')" style="top: 310px; left: 255px; width: 60px; height: 60px;"></div>
+                        
+                        <!-- 推荐歌单区 -->
+                        <div class="hotspot" onclick="goToPage('recommendPage')" style="top: 400px; left: 20px; width: 300px; height: 200px;"></div>
+                        
+                        <!-- 新歌首发区 -->
+                        <div class="hotspot" onclick="goToPage('newSongPage')" style="top: 620px; left: 20px; width: 300px; height: 150px;"></div>
+                        
+                        <!-- 排行榜区 -->
+                        <div class="hotspot" onclick="goToPage('rankPage')" style="top: 790px; left: 20px; width: 300px; height: 150px;"></div>
+                    </div>
+                    <div class="scroll-indicator">👆 点击区域进入详情</div>
+                </div>
+
+                <!-- 搜索页面 -->
+                <div class="page hidden" id="searchPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🔍 搜索功能</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>支持搜索歌曲、歌手、歌单、MV等多种内容，实时联想搜索建议</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>输入搜索</strong><span>输入关键词，实时显示搜索建议</span></li>
+                                <li><strong>搜索结果</strong><span>按歌曲、歌手、歌单分类展示</span></li>
+                                <li><strong>搜索历史</strong><span>保留历史搜索记录</span></li>
+                                <li><strong>热门搜索</strong><span>展示当前热门搜索词</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 搜索界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 排行榜页面 -->
+                <div class="page hidden" id="rankPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🏆 排行榜</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>展示各类音乐榜单，包括热歌榜、飙升榜、新歌榜、原创榜等</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>榜单分类</strong><span>官方榜、地区榜、特色榜等</span></li>
+                                <li><strong>榜单详情</strong><span>查看榜单歌曲列表</span></li>
+                                <li><strong>播放全部</strong><span>一键播放榜单歌曲</span></li>
+                                <li><strong>收藏榜单</strong><span>收藏喜欢的榜单</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 排行榜界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 歌单页面 -->
+                <div class="page hidden" id="songlistPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">📋 歌单广场</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>海量精选歌单，按风格、场景、心情等分类推荐</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>歌单分类</strong><span>按标签浏览各类歌单</span></li>
+                                <li><strong>歌单详情</strong><span>查看歌单歌曲列表</span></li>
+                                <li><strong>收藏歌单</strong><span>收藏喜欢的歌单</span></li>
+                                <li><strong>创建歌单</strong><span>创建自己的歌单</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 歌单广场界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 歌手页面 -->
+                <div class="page hidden" id="singerPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🎤 歌手</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>按地区、性别、风格等分类浏览歌手</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>歌手分类</strong><span>按地区、性别筛选</span></li>
+                                <li><strong>歌手详情</strong><span>查看歌手作品和资料</span></li>
+                                <li><strong>关注歌手</strong><span>关注喜欢的歌手</span></li>
+                                <li><strong>歌手动态</strong><span>查看歌手最新动态</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 歌手界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 轮播图页面 -->
+                <div class="page hidden" id="bannerPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🎪 推荐活动</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>展示平台精选推荐内容、活动、新歌首发等</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>轮播展示</strong><span>左右滑动查看更多</span></li>
+                                <li><strong>点击跳转</strong><span>点击进入详情页</span></li>
+                                <li><strong>自动轮播</strong><span>定时切换推荐内容</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 推荐活动界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 本地音乐页面 -->
+                <div class="page hidden" id="localPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">📁 本地音乐</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>管理本地存储的音乐文件，支持扫描和播放</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>扫描本地</strong><span>扫描设备音乐文件</span></li>
+                                <li><strong>本地播放</strong><span>播放本地音乐</span></li>
+                                <li><strong>文件管理</strong><span>删除、重命名本地文件</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 本地音乐界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 电台页面 -->
+                <div class="page hidden" id="radioPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">📻 电台</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>各类主题电台，智能推荐音乐</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>主题电台</strong><span>按心情、场景选择</span></li>
+                                <li><strong>私人FM</strong><span>个性化推荐</span></li>
+                                <li><strong>订阅电台</strong><span>订阅喜欢的电台</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 电台界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 视频页面 -->
+                <div class="page hidden" id="videoPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🎬 MV</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>海量高清MV视频，尽享视听盛宴</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>MV推荐</strong><span>精选热门MV</span></li>
+                                <li><strong>高清播放</strong><span>支持多清晰度选择</span></li>
+                                <li><strong>收藏MV</strong><span>收藏喜欢的视频</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 MV界面演示</div>
+                    </div>
+                </div>
+
+                <!-- DJ页面 -->
+                <div class="page hidden" id="djPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🎧 DJ</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>DJ节目、有声小说、相声评书等丰富内容</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>分类浏览</strong><span>多种内容分类</span></li>
+                                <li><strong>订阅节目</strong><span>追更喜欢的节目</span></li>
+                                <li><strong>离线下载</strong><span>下载后离线收听</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 DJ界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 推荐歌单页面 -->
+                <div class="page hidden" id="recommendPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">🎶 推荐歌单</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>基于用户听歌偏好，智能推荐精选歌单</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>每日推荐</strong><span>每天更新推荐歌单</span></li>
+                                <li><strong>个性推荐</strong><span>基于听歌历史推荐</span></li>
+                                <li><strong>歌单收藏</strong><span>收藏喜欢的歌单</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 推荐歌单界面演示</div>
+                    </div>
+                </div>
+
+                <!-- 新歌首发页面 -->
+                <div class="page hidden" id="newSongPage">
+                    <div class="detail-page">
+                        <div class="detail-header">
+                            <button class="back-btn" onclick="goToPage('homePage')">←</button>
+                            <h2 class="detail-title">✨ 新歌首发</h2>
+                        </div>
+                        <div class="detail-card">
+                            <h3>功能说明</h3>
+                            <p>第一时间获取最新发布的歌曲</p>
+                        </div>
+                        <div class="detail-card">
+                            <h3>交互逻辑</h3>
+                            <ul class="feature-list">
+                                <li><strong>新歌速递</strong><span>最新发布歌曲</span></li>
+                                <li><strong>首发预定</strong><span>预定未发歌曲</span></li>
+                                <li><strong>歌手新歌</strong><span>按歌手查看新歌</span></li>
+                            </ul>
+                        </div>
+                        <div class="demo-screenshot">📱 新歌首发界面演示</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <p>酷狗乐库页面完整展示</p>
+        <p>酷狗乐库页面完整展示 · 点击热区查看功能详情</p>
     </div>
+
+    <script>
+        function goToPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                if (page.id === pageId) {
+                    page.classList.remove('hidden');
+                } else {
+                    page.classList.add('hidden');
+                }
+            });
+        }
+
+        // 显示提示
+        setTimeout(() => {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (indicator) {
+                indicator.style.opacity = '1';
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
