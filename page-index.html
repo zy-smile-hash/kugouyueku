@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>酷狗乐库 - 二级页面索引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #2d1f1a 0%, #4a3728 100%);
+            color: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .section-header {
+            background: #f8f8f8;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .section-count {
+            background: #ff6b6b;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        .page-list {
+            padding: 12px 20px;
+        }
+        .page-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .page-item:last-child {
+            border-bottom: none;
+        }
+        .page-item:hover {
+            background: #f8f8f8;
+        }
+        .page-number {
+            width: 32px;
+            height: 32px;
+            background: #ff6b6b;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .page-info {
+            flex: 1;
+        }
+        .page-name {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .page-file {
+            font-size: 12px;
+            color: #999;
+        }
+        .page-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 12px;
+        }
+        .status-empty {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-done {
+            background: #d4edda;
+            color: #155724;
+        }
+        .total-stat {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .stat-item {
+            flex: 1;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+        .instructions {
+            background: #e7f3ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .instructions h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .instructions ol {
+            padding-left: 24px;
+            font-size: 14px;
+            color: #666;
+            line-height: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎵 酷狗乐库 - 二级页面索引</h1>
+        <p>根据PRD文档3.2部分功能交互说明创建的所有二级页面</p>
+    </div>
+
+    <div class="total-stat">
+        <div class="stat-item">
+            <div class="stat-number">33</div>
+            <div class="stat-label">总页面数</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">0</div>
+            <div class="stat-label">已完成</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">33</div>
+            <div class="stat-label">待完成</div>
+        </div>
+    </div>
+
+    <!-- 一、顶部导航区 -->
+    <div class="section">
+        <div class="section-header">
+            一、顶部导航区 <span class="section-count">3个页面</span>
+        </div>
+        <div class="page-list">
+            <div class="page-item" onclick="openPage('01-search-result.html')">
+                <div class="page-number">01</div>
+                <div class="page-info">
+                    <div class="page-name">搜索结果</div>
+                    <div class="page-file">01-search-result.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('02-scan-login.html')">
+                <div class="page-number">02</div>
+                <div class="page-info">
+                    <div class="page-name">扫码登录</div>
+                    <div class="page-file">02-scan-login.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('03-search-recommend.html')">
+                <div class="page-number">03</div>
+                <div class="page-info">
+                    <div class="page-name">搜索推荐</div>
+                    <div class="page-file">03-search-recommend.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 二、快捷功能入口区 -->
+    <div class="section">
+        <div class="section-header">
+            二、快捷功能入口区 <span class="section-count">13个页面</span>
+        </div>
+        <div class="page-list">
+            <div class="page-item" onclick="openPage('04-category.html')">
+                <div class="page-number">04</div>
+                <div class="page-info">
+                    <div class="page-name">歌曲/歌单分类</div>
+                    <div class="page-file">04-category.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('05-rank-list.html')">
+                <div class="page-number">05</div>
+                <div class="page-info">
+                    <div class="page-name">排行榜列表</div>
+                    <div class="page-file">05-rank-list.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('06-artist-category.html')">
+                <div class="page-number">06</div>
+                <div class="page-info">
+                    <div class="page-name">歌手分类</div>
+                    <div class="page-file">06-artist-category.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('07-app-download.html')">
+                <div class="page-number">07</div>
+                <div class="page-info">
+                    <div class="page-name">APP下载</div>
+                    <div class="page-file">07-app-download.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('08-medal-collection.html')">
+                <div class="page-number">08</div>
+                <div class="page-info">
+                    <div class="page-name">勋章收藏馆</div>
+                    <div class="page-file">08-medal-collection.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('09-medal-fans.html')">
+                <div class="page-number">09</div>
+                <div class="page-info">
+                    <div class="page-name">乐迷勋章</div>
+                    <div class="page-file">09-medal-fans.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('10-premium-album.html')">
+                <div class="page-number">10</div>
+                <div class="page-info">
+                    <div class="page-name">至臻唱片库</div>
+                    <div class="page-file">10-premium-album.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('11-star-station.html')">
+                <div class="page-number">11</div>
+                <div class="page-info">
+                    <div class="page-name">星光站</div>
+                    <div class="page-file">11-star-station.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('12-ai-create.html')">
+                <div class="page-number">12</div>
+                <div class="page-info">
+                    <div class="page-name">AI写歌</div>
+                    <div class="page-file">12-ai-create.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('13-digital-album.html')">
+                <div class="page-number">13</div>
+                <div class="page-info">
+                    <div class="page-name">数字专辑唱片店</div>
+                    <div class="page-file">13-digital-album.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('14-mall.html')">
+                <div class="page-number">14</div>
+                <div class="page-info">
+                    <div class="page-name">酷狗商城</div>
+                    <div class="page-file">14-mall.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('15-concert.html')">
+                <div class="page-number">15</div>
+                <div class="page-info">
+                    <div class="page-name">演唱会票务</div>
+                    <div class="page-file">15-concert.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('16-new-song-reserve.html')">
+                <div class="page-number">16</div>
+                <div class="page-info">
+                    <div class="page-name">新歌预约</div>
+                    <div class="page-file">16-new-song-reserve.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 三、内容主分区 -->
+    <div class="section">
+        <div class="section-header">
+            三、内容主分区 <span class="section-count">16个页面</span>
+        </div>
+        <div class="page-list">
+            <div class="page-item" onclick="openPage('17-featured-detail.html')">
+                <div class="page-number">17</div>
+                <div class="page-info">
+                    <div class="page-name">编辑精选详情</div>
+                    <div class="page-file">17-featured-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('18-hot-rank-detail.html')">
+                <div class="page-number">18</div>
+                <div class="page-info">
+                    <div class="page-name">热歌榜详情</div>
+                    <div class="page-file">18-hot-rank-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('19-new-song-detail.html')">
+                <div class="page-number">19</div>
+                <div class="page-info">
+                    <div class="page-name">新歌速递详情</div>
+                    <div class="page-file">19-new-song-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('20-hot-zone-detail.html')">
+                <div class="page-number">20</div>
+                <div class="page-info">
+                    <div class="page-name">热门专区详情</div>
+                    <div class="page-file">20-hot-zone-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('21-golden-leslie.html')">
+                <div class="page-number">21</div>
+                <div class="page-info">
+                    <div class="page-name">一人一首张国荣</div>
+                    <div class="page-file">21-golden-leslie.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('22-golden-vic.html')">
+                <div class="page-number">22</div>
+                <div class="page-info">
+                    <div class="page-name">一人一首周传雄</div>
+                    <div class="page-file">22-golden-vic.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('23-golden-jeff.html')">
+                <div class="page-number">23</div>
+                <div class="page-info">
+                    <div class="page-name">一人一首张信哲</div>
+                    <div class="page-file">23-golden-jeff.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('24-artist-jay.html')">
+                <div class="page-number">24</div>
+                <div class="page-info">
+                    <div class="page-name">周杰伦歌曲精选</div>
+                    <div class="page-file">24-artist-jay.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('25-artist-jj.html')">
+                <div class="page-number">25</div>
+                <div class="page-info">
+                    <div class="page-name">林俊杰歌曲精选</div>
+                    <div class="page-file">25-artist-jj.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('26-artist-mayday.html')">
+                <div class="page-number">26</div>
+                <div class="page-info">
+                    <div class="page-name">五月天歌曲精选</div>
+                    <div class="page-file">26-artist-mayday.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('27-chinese-style-detail.html')">
+                <div class="page-number">27</div>
+                <div class="page-info">
+                    <div class="page-name">国风国潮专区详情</div>
+                    <div class="page-file">27-chinese-style-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('28-variety-detail.html')">
+                <div class="page-number">28</div>
+                <div class="page-info">
+                    <div class="page-name">热门综艺详情</div>
+                    <div class="page-file">28-variety-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('29-game-detail.html')">
+                <div class="page-number">29</div>
+                <div class="page-info">
+                    <div class="page-name">热门游戏详情</div>
+                    <div class="page-file">29-game-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('30-movie-detail.html')">
+                <div class="page-number">30</div>
+                <div class="page-info">
+                    <div class="page-name">热门影视详情</div>
+                    <div class="page-file">30-movie-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('31-composer-detail.html')">
+                <div class="page-number">31</div>
+                <div class="page-info">
+                    <div class="page-name">词曲名家集详情</div>
+                    <div class="page-file">31-composer-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+            <div class="page-item" onclick="openPage('32-label-detail.html')">
+                <div class="page-number">32</div>
+                <div class="page-info">
+                    <div class="page-name">厂牌音乐详情</div>
+                    <div class="page-file">32-label-detail.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 四、全局体验区 -->
+    <div class="section">
+        <div class="section-header">
+            四、全局体验区 <span class="section-count">1个页面</span>
+        </div>
+        <div class="page-list">
+            <div class="page-item" onclick="openPage('33-playlist.html')">
+                <div class="page-number">33</div>
+                <div class="page-info">
+                    <div class="page-name">播放列表</div>
+                    <div class="page-file">33-playlist.html</div>
+                </div>
+                <div class="page-status status-empty">待完成</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <h3>📝 使用说明</h3>
+        <ol>
+            <li>点击任意页面卡片可预览该页面的空白模板</li>
+            <li>每个页面模板都包含页面信息、图片上传区域和操作说明</li>
+            <li>请根据页面功能说明，在图片上传区域添加对应的页面设计图</li>
+            <li>建议图片尺寸：430px × 800px（手机APP标准尺寸）</li>
+            <li>所有页面完成后，将图片替换到对应的HTML文件中即可</li>
+        </ol>
+    </div>
+
+    <script>
+        function openPage(filename) {
+            window.open('pages/' + filename, '_blank');
+        }
+    </script>
+</body>
+</html>
