@@ -17,7 +17,7 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 20px;
         }
 
@@ -43,7 +43,7 @@
             height: 30px;
             background: #000;
             border-radius: 0 0 20px 20px;
-            z-index: 10;
+            z-index: 100;
         }
 
         .screen {
@@ -82,6 +82,12 @@
 
         .main-page {
             position: relative;
+            width: 100%;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
         }
 
         .main-image {
@@ -93,22 +99,28 @@
         .clickable-area {
             position: absolute;
             cursor: pointer;
-            border: 2px solid rgba(255, 0, 0, 0.5);
-            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid rgba(255, 0, 0, 0.6);
+            background: rgba(255, 0, 0, 0.15);
             border-radius: 8px;
             transition: all 0.3s;
-            z-index: 5;
+            z-index: 10;
         }
 
         .clickable-area:hover {
-            background: rgba(255, 0, 0, 0.2);
-            border-color: rgba(255, 0, 0, 0.8);
-            transform: scale(1.02);
+            background: rgba(255, 0, 0, 0.3);
+            border-color: rgba(255, 0, 0, 0.9);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .clickable-area:active {
+            transform: scale(0.98);
+            background: rgba(255, 0, 0, 0.4);
         }
 
         .secondary-page {
             background: #f5f5f5;
             padding: 20px;
+            min-height: 100%;
         }
 
         .page-header {
@@ -119,6 +131,9 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             border-radius: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
         }
 
         .back-btn {
@@ -218,38 +233,6 @@
             font-size: 14px;
         }
 
-        .function-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            padding: 20px;
-        }
-
-        .function-item {
-            background: #fff;
-            padding: 20px 10px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-
-        .function-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-        }
-
-        .function-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .function-name {
-            font-size: 12px;
-            color: #333;
-            font-weight: 500;
-        }
-
         .back-to-top {
             position: fixed;
             bottom: 20px;
@@ -303,6 +286,52 @@
         .tooltip.show {
             opacity: 1;
         }
+
+        .nav-menu {
+            position: fixed;
+            top: 50%;
+            right: calc(50% - 210px);
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 15px 10px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .nav-menu h4 {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 8px 15px;
+            margin: 5px 0;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            background: #667eea;
+            color: #fff;
+        }
+
+        @media (max-width: 420px) {
+            .nav-menu {
+                right: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -310,25 +339,9 @@
         <div class="notch"></div>
         <div class="screen">
             <div id="mainPage" class="page main-page active">
-                <img src="./yuelu_image.png" alt="酷狗乐库" class="main-image">
-                <div class="clickable-area" data-page="search" style="top: 8%; left: 5%; width: 12%; height: 3%;" title="搜索"></div>
-                <div class="clickable-area" data-page="audiobook" style="top: 8%; left: 20%; width: 12%; height: 3%;" title="听书"></div>
-                <div class="clickable-area" data-page="classify" style="top: 25%; left: 5%; width: 25%; height: 8%;" title="歌曲/歌单分类"></div>
-                <div class="clickable-area" data-page="ranking" style="top: 25%; left: 35%; width: 25%; height: 8%;" title="歌曲排行榜"></div>
-                <div class="clickable-area" data-page="artists" style="top: 25%; left: 65%; width: 25%; height: 8%;" title="歌手分类"></div>
-                <div class="clickable-area" data-page="appdownload" style="top: 35%; left: 5%; width: 25%; height: 6%;" title="APP下载"></div>
-                <div class="clickable-area" data-page="medal" style="top: 35%; left: 35%; width: 25%; height: 6%;" title="勋章收藏馆"></div>
-                <div class="clickable-area" data-page="album" style="top: 42%; left: 65%; width: 25%; height: 6%;" title="至臻唱片库"></div>
-                <div class="clickable-area" data-page="starlight" style="top: 49%; left: 5%; width: 25%; height: 6%;" title="星光站"></div>
-                <div class="clickable-area" data-page="ai" style="top: 49%; left: 35%; width: 25%; height: 6%;" title="AI写歌"></div>
-                <div class="clickable-area" data-page="digital" style="top: 49%; left: 65%; width: 25%; height: 6%;" title="数字专辑"></div>
-                <div class="clickable-area" data-page="mall" style="top: 56%; left: 5%; width: 25%; height: 6%;" title="酷狗商城"></div>
-                <div class="clickable-area" data-page="wxapp" style="top: 56%; left: 35%; width: 25%; height: 6%;" title="微信小程序"></div>
-                <div class="clickable-area" data-page="reserve" style="top: 56%; left: 65%; width: 25%; height: 6%;" title="新歌预约"></div>
-                <div class="clickable-area" data-page="module1" style="top: 63%; left: 5%; width: 90%; height: 8%;" title="编辑精选"></div>
-                <div class="clickable-area" data-page="module2" style="top: 72%; left: 5%; width: 90%; height: 10%;" title="热歌榜"></div>
-                <div class="clickable-area" data-page="module3" style="top: 83%; left: 5%; width: 90%; height: 10%;" title="新歌速递"></div>
-                <div class="clickable-area" data-page="module4" style="top: 94%; left: 5%; width: 90%; height: 8%;" title="热门专区"></div>
+                <div class="image-container" id="imageContainer">
+                    <img src="./yuelu_image.png" alt="酷狗乐库" class="main-image" id="mainImage">
+                </div>
             </div>
 
             <div id="searchPage" class="page secondary-page">
@@ -338,7 +351,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🔍 搜索功能</h3>
-                    <img src="./images/buttons/btn1_search.png" alt="搜索" class="module-image">
                     <p>在搜索框中输入歌曲名、歌手名或歌词关键词，快速找到您想听的音乐。支持语音搜索和图片搜索。</p>
                     <ul class="info-list">
                         <li>搜索历史自动保存</li>
@@ -360,7 +372,6 @@
                 </div>
                 <div class="page-content">
                     <h3>📚 听书功能</h3>
-                    <img src="./images/buttons/btn2_audiobook.png" alt="听书" class="module-image">
                     <p>海量有声小说、相声评书、知识百科随时收听。支持定时关闭、播放倍速调节。</p>
                     <ul class="info-list">
                         <li>有声小说</li>
@@ -382,7 +393,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🎵 歌曲/歌单分类</h3>
-                    <img src="./images/buttons/btn3_classify.png" alt="分类" class="module-image">
                     <p>按照专区（粤语/经典/车载等）、频道（DJ/语言/场景/心情等）呈现不同类型的歌曲和歌单。</p>
                     <ul class="info-list">
                         <li>按语言分类：华语、欧美、日韩等</li>
@@ -404,7 +414,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🏆 歌曲排行榜</h3>
-                    <img src="./images/buttons/btn4_ranking.png" alt="排行榜" class="module-image">
                     <p>展示各类热门榜单，包括：腾讯音乐榜、90后热歌榜、内地榜、粤语金曲榜等。</p>
                     <ul class="info-list">
                         <li>腾讯音乐榜</li>
@@ -428,7 +437,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🎤 歌手分类</h3>
-                    <img src="./images/buttons/btn5_artists.png" alt="歌手分类" class="module-image">
                     <p>按照地区、性别展示不同类型的歌手，可关注喜欢的歌手或直接进入歌手页面播放歌曲。</p>
                     <ul class="info-list">
                         <li>按地区：内地、港台、欧美、日韩</li>
@@ -450,7 +458,6 @@
                 </div>
                 <div class="page-content">
                     <h3>📱 APP下载</h3>
-                    <img src="./images/buttons/btn6_appdownload.png" alt="APP下载" class="module-image">
                     <p>下载vemus未音APP，享受更高品质的音乐体验和更多专属功能。</p>
                     <ul class="info-list">
                         <li>无损音质下载</li>
@@ -472,7 +479,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🏅 勋章收藏馆</h3>
-                    <img src="./images/modules/module_medal.png" alt="勋章收藏馆" class="module-image">
                     <p><strong>模块1：佩戴管理</strong> - 点选添加已获得勋章后，会在个人主页成就展示，最多选择5个勋章</p>
                     <p><strong>模块2：勋章展示</strong></p>
                     <ul class="info-list">
@@ -496,7 +502,6 @@
                 </div>
                 <div class="page-content">
                     <h3>💿 至臻唱片库</h3>
-                    <img src="./images/buttons/btn8_album.png" alt="至臻唱片库" class="module-image">
                     <p>专辑展示页，可根据专辑类型、歌手、流派、语言、年代等条件进行专辑筛选。</p>
                     <ul class="info-list">
                         <li>按专辑类型筛选</li>
@@ -519,7 +524,6 @@
                 </div>
                 <div class="page-content">
                     <h3>⭐ 星光站（抽碎片集明星卡）</h3>
-                    <img src="./images/buttons/btn9_starlight.png" alt="星光站" class="module-image">
                     <p>付费抽卡的方式收集/分解换碎片，兑换商品后邮寄实体卡。</p>
                     <ul class="info-list">
                         <li>抽卡获取碎片</li>
@@ -541,7 +545,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🤖 AI写歌</h3>
-                    <img src="./images/buttons/btn10_ai.png" alt="AI写歌" class="module-image">
                     <p>通过对话模式/专业模式输入内容，AI生成歌曲后即可付费导出。</p>
                     <ul class="info-list">
                         <li>对话模式 - 轻松创作</li>
@@ -563,7 +566,6 @@
                 </div>
                 <div class="page-content">
                     <h3>💎 数字专辑唱片店</h3>
-                    <img src="./images/buttons/btn11_digital.png" alt="数字专辑" class="module-image">
                     <p>付费购买后可获得：无损音质永久畅听、专辑多版本封面、专属勋章、头像挂件、明信片等。</p>
                     <ul class="info-list">
                         <li>无损音质永久畅听</li>
@@ -586,7 +588,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🛒 酷狗商城H5</h3>
-                    <img src="./images/buttons/btn12_mall.png" alt="酷狗商城" class="module-image">
                     <p>可购买耳机、百货、美妆及明星周边商品。</p>
                     <ul class="info-list">
                         <li>耳机音响</li>
@@ -608,7 +609,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🎫 微信小程序 - 鹅票票</h3>
-                    <img src="./images/buttons/btn13_wxapp.png" alt="微信小程序" class="module-image">
                     <p>可预约或直接购买演唱会门票。</p>
                     <ul class="info-list">
                         <li>演唱会门票</li>
@@ -630,7 +630,6 @@
                 </div>
                 <div class="page-content">
                     <h3>📅 新歌/专辑预约</h3>
-                    <img src="./images/buttons/btn14_reserve.png" alt="新歌预约" class="module-image">
                     <p>点击预约新歌/专辑，上线后会收到短信通知和app push。</p>
                     <ul class="info-list">
                         <li>新歌预约</li>
@@ -652,7 +651,6 @@
                 </div>
                 <div class="page-content">
                     <h3>✨ 编辑精选</h3>
-                    <img src="./images/modules/module1.png" alt="编辑精选" class="module-image">
                     <p>16个内容块（13歌单、1活动页、1专辑页、1演明星期刊）</p>
                     <ul class="info-list">
                         <li>精选歌单推荐</li>
@@ -670,7 +668,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🔥 热歌榜展示</h3>
-                    <img src="./images/modules/module2.png" alt="热歌榜" class="module-image">
                     <p>展示6个榜单：欧美金曲、欧美、top500、飙升、抖音热歌、DJ热歌</p>
                     <ul class="info-list">
                         <li>点击内容块展示歌单跳转歌单详情页</li>
@@ -686,7 +683,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🎶 新歌速递</h3>
-                    <img src="./images/modules/module3.png" alt="新歌速递" class="module-image">
                     <p>展示4种语言歌单：华语、欧美、top500、韩国、日本</p>
                     <ul class="info-list">
                         <li>点击内容块展示歌单跳转歌单详情页</li>
@@ -702,7 +698,6 @@
                 </div>
                 <div class="page-content">
                     <h3>🎧 热门专区</h3>
-                    <img src="./images/modules/module4.png" alt="热门专区" class="module-image">
                     <p>展示7个音乐专区：粤语流行、抖音热门歌、DJ、小憩空间、KTV必点曲、车载、AI热歌免费听</p>
                     <ul class="info-list">
                         <li>点击内容块展示音乐专区跳转歌单/专区详情页</li>
@@ -710,10 +705,231 @@
                     </ul>
                 </div>
             </div>
+
+            <div id="module5Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">一人一首金曲</span>
+                </div>
+                <div class="page-content">
+                    <h3>🎤 一人一首金曲系列</h3>
+                    <p>展示8个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转歌手页</li>
+                        <li>内容包含歌手介绍、专辑售卖、明星卡手机、歌单、评论等</li>
+                        <li>点击箭头跳转更多歌手信息</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module6Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">至臻名人堂</span>
+                </div>
+                <div class="page-content">
+                    <h3>⭐ 至臻名人堂</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转对应歌手的歌曲精选页</li>
+                        <li>内容包含歌曲、歌单、专辑、视频等</li>
+                        <li>点击箭头跳转更多名人堂歌手信息</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module7Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">国风国潮</span>
+                </div>
+                <div class="page-content">
+                    <h3>🏮 国风国潮专区</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转歌手页</li>
+                        <li>内容包含歌手国潮代表歌曲、推荐歌单、明星照抽奖、评论互动等</li>
+                        <li>点击箭头跳转国风国潮专区</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module8Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">热门综艺</span>
+                </div>
+                <div class="page-content">
+                    <h3>📺 热门综艺</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转综艺详情页</li>
+                        <li>内容包含综艺单曲、歌手展示、往期专辑、其他综艺推荐、评论区等</li>
+                        <li>点击箭头跳转热门综艺专区</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module9Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">热门游戏</span>
+                </div>
+                <div class="page-content">
+                    <h3>🎮 热门游戏</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转游戏歌单</li>
+                        <li>点击箭头跳转游戏专区</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module10Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">热门影视</span>
+                </div>
+                <div class="page-content">
+                    <h3>🎬 热门影视</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转影视歌单</li>
+                        <li>点击箭头跳转影视专区</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module11Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">词曲名家集</span>
+                </div>
+                <div class="page-content">
+                    <h3>✍️ 词曲名家集</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转词曲名家页</li>
+                        <li>内容包含金曲集、勋章、往期回顾等</li>
+                        <li>点击箭头跳转词曲名家集</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module12Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">厂牌音乐</span>
+                </div>
+                <div class="page-content">
+                    <h3>🎵 厂牌音乐</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转厂牌主页</li>
+                        <li>内容包含金歌曲、歌单、专辑、视频等</li>
+                        <li>点击箭头跳转厂牌音乐专区</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module13Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">数字专辑</span>
+                </div>
+                <div class="page-content">
+                    <h3>💎 数字专辑</h3>
+                    <p>展示9个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转数字专辑唱片页面</li>
+                        <li>付费购买后可获得无损音质、专属勋章等</li>
+                        <li>点击箭头跳转数字专辑唱片聚合页</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module14Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">新碟上架</span>
+                </div>
+                <div class="page-content">
+                    <h3>💿 新碟上架</h3>
+                    <p>展示13个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块播放当前歌曲</li>
+                        <li>点击箭头跳转新歌/新碟全品类页面</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module15Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">新歌预约</span>
+                </div>
+                <div class="page-content">
+                    <h3>📅 新歌预约</h3>
+                    <p>展示6个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块跳转新歌/专辑预约页面</li>
+                        <li>点击箭头跳转新歌/专辑全品类页面</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="module16Page" class="page secondary-page">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <span class="page-title">最新MV</span>
+                </div>
+                <div class="page-content">
+                    <h3>🎬 最新MV</h3>
+                    <p>展示6个内容块</p>
+                    <ul class="info-list">
+                        <li>点击内容块播放当前MV</li>
+                        <li>点击箭头跳转视频专区</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
     <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <div class="nav-menu">
+        <h4>功能导航</h4>
+        <button class="nav-item" onclick="showPage('searchPage')">🔍 搜索</button>
+        <button class="nav-item" onclick="showPage('audiobookPage')">📚 听书</button>
+        <button class="nav-item" onclick="showPage('classifyPage')">🎵 分类</button>
+        <button class="nav-item" onclick="showPage('rankingPage')">🏆 排行榜</button>
+        <button class="nav-item" onclick="showPage('artistsPage')">🎤 歌手</button>
+        <button class="nav-item" onclick="showPage('appdownloadPage')">📱 下载</button>
+        <button class="nav-item" onclick="showPage('medalPage')">🏅 勋章</button>
+        <button class="nav-item" onclick="showPage('albumPage')">💿 唱片库</button>
+        <button class="nav-item" onclick="showPage('starlightPage')">⭐ 星光站</button>
+        <button class="nav-item" onclick="showPage('aiPage')">🤖 AI写歌</button>
+        <button class="nav-item" onclick="showPage('digitalPage')">💎 数字专辑</button>
+        <button class="nav-item" onclick="showPage('mallPage')">🛒 商城</button>
+        <button class="nav-item" onclick="showPage('wxappPage')">🎫 票务</button>
+        <button class="nav-item" onclick="showPage('reservePage')">📅 预约</button>
+        <button class="nav-item" onclick="showPage('module1Page')">✨ 编辑精选</button>
+        <button class="nav-item" onclick="showPage('module2Page')">🔥 热歌榜</button>
+        <button class="nav-item" onclick="showPage('module3Page')">🎶 新歌速递</button>
+        <button class="nav-item" onclick="showPage('module4Page')">🎧 热门专区</button>
+        <button class="nav-item" onclick="showPage('module5Page')">🎤 金曲系列</button>
+        <button class="nav-item" onclick="showPage('module6Page')">⭐ 名人堂</button>
+        <button class="nav-item" onclick="showPage('module7Page')">🏮 国风国潮</button>
+        <button class="nav-item" onclick="showPage('module8Page')">📺 热门综艺</button>
+        <button class="nav-item" onclick="showPage('module9Page')">🎮 热门游戏</button>
+        <button class="nav-item" onclick="showPage('module10Page')">🎬 热门影视</button>
+        <button class="nav-item" onclick="showPage('module11Page')">✍️ 词曲名家</button>
+        <button class="nav-item" onclick="showPage('module12Page')">🎵 厂牌音乐</button>
+        <button class="nav-item" onclick="showPage('module13Page')">💎 数字专辑</button>
+        <button class="nav-item" onclick="showPage('module14Page')">💿 新碟上架</button>
+        <button class="nav-item" onclick="showPage('module15Page')">📅 新歌预约</button>
+        <button class="nav-item" onclick="showPage('module16Page')">🎬 最新MV</button>
+    </div>
 
     <div id="tooltip" class="tooltip"></div>
 
@@ -726,7 +942,7 @@
             });
             document.getElementById(pageId).classList.add('active');
             pageHistory.push(pageId);
-            document.getElementById('mainPage').closest('.screen').scrollTop = 0;
+            document.querySelector('.screen').scrollTop = 0;
         }
 
         function goBack() {
@@ -736,7 +952,7 @@
                     page.classList.remove('active');
                 });
                 document.getElementById(pageHistory[pageHistory.length - 1]).classList.add('active');
-                document.getElementById('mainPage').closest('.screen').scrollTop = 0;
+                document.querySelector('.screen').scrollTop = 0;
             }
         }
 
@@ -744,26 +960,32 @@
             document.querySelector('.screen').scrollTop = 0;
         }
 
-        document.querySelectorAll('.clickable-area').forEach(area => {
-            area.addEventListener('click', function() {
-                const pageId = this.getAttribute('data-page') + 'Page';
-                showPage(pageId);
-            });
+        window.onload = function() {
+            const img = document.getElementById('mainImage');
+            const container = document.getElementById('imageContainer');
+            
+            if (img && container) {
+                img.onload = function() {
+                    const imgWidth = img.naturalWidth;
+                    const imgHeight = img.naturalHeight;
+                    const displayWidth = img.clientWidth;
+                    const displayHeight = img.clientHeight;
+                    
+                    console.log('图片尺寸:', imgWidth, 'x', imgHeight);
+                    console.log('显示尺寸:', displayWidth, 'x', displayHeight);
+                };
+            }
+        };
 
-            area.addEventListener('mouseenter', function(e) {
-                const title = this.getAttribute('title');
-                if (title) {
-                    const tooltip = document.getElementById('tooltip');
-                    tooltip.textContent = title;
-                    tooltip.style.left = e.pageX + 10 + 'px';
-                    tooltip.style.top = e.pageY + 10 + 'px';
-                    tooltip.classList.add('show');
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const img = document.getElementById('mainImage');
+                if (img.complete) {
+                    console.log('图片已加载');
+                    console.log('原始尺寸:', img.naturalWidth, 'x', img.naturalHeight);
+                    console.log('显示尺寸:', img.clientWidth, 'x', img.clientHeight);
                 }
-            });
-
-            area.addEventListener('mouseleave', function() {
-                document.getElementById('tooltip').classList.remove('show');
-            });
+            }, 1000);
         });
     </script>
 </body>
